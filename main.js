@@ -75,19 +75,16 @@ function printElement(item, index){
     <div class="d-flex flex-row justify-content-between">
         <div class=" w-25">${item.name} </div>
         <div class="d-flex flex-row justify-content-end">
-            
-        
-        <div class="d-flex flex-row justify-content-end">
-            <span class="p-2">${item.netPrice}€ </span>
-            <span class="p-2">-${item.discount}% </span>
-        </div>   
-        <div class="d-flex flex-row justify-content-end">
-                <label for="Quantity" class="form-label">Quantity:</label>
-                <input type="number" class="form-control w-25" id="Quantity" placeholder="x">
+            <div class="d-flex flex-row justify-content-end">
+                <span class="p-2">${item.netPrice}€ </span>
+                <span class="p-2">-${item.discount}% </span>
+            </div>   
+            <div class="d-flex flex-row justify-content-end">
+                    <label for="Quantity${index}" class="form-label">Quantity:</label>
+                    <input type="number" class="form-control w-25" id="Quantity${index}" placeholder="0">
+            </div>
         </div>
-        </div>
-            <button type="button" class="btn btn-primary" > <span class="material-symbols-outlined">add_shopping_cart</span></button>
-
+        <button type="button" class="btn btn-primary" > <span class="material-symbols-outlined">add_shopping_cart</span></button>
     </div>
     `
     list.appendChild(listItem)
@@ -140,3 +137,31 @@ function calcTotal(cart){
 
 
 calcTotal(cart)
+
+let selectedItems = []
+const addToCart = document.querySelectorAll(".btn-primary")
+
+addToCart.forEach((button, index)=>{
+    button.addEventListener('click', function(){
+        const product = cart[index]
+        const itemQuantity = document.getElementById(`Quantity${index}`)
+        const quantity = parseInt(itemQuantity.value)
+        if(isNaN(quantity) || quantity<=0){
+            alert("Bad input") 
+            return 
+        }
+        if(quantity>product.quantity){
+            alert("Not enough stock")
+            return
+        }
+        console.log(product.quantity)
+        product.quantity -= quantity
+        console.log(product.quantity)
+        const chosenProduct = {
+            ...product,
+            quantity
+        }
+        selectedItems.push(chosenProduct)
+        console.log(selectedItems)
+    })
+})
